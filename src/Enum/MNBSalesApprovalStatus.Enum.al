@@ -1,8 +1,8 @@
-
 namespace MNB;
-enum 65403 "MNB Approval Status"
+
+enum 65403 "MNB Sales Approval Status"
 {
-    Caption = 'Approval Status';
+    Caption = 'Sales Approval Status';
 
     value(0; Open)
     {

@@ -1,3 +1,4 @@
+namespace MNB;
 table 65401 "MNB Sales Header Local"
 {
     Caption = 'MNB Sales Header Local';

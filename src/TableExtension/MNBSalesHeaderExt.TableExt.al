@@ -1,6 +1,6 @@
 namespace MNB;
 
-tableextension 65402 "MNB Sales Header Ext" extends "Sales Header Local"
+tableextension 65402 "MNB Sales Header Ext" extends "MNB Sales Header Local"
 {
     fields
     {
