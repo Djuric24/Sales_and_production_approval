@@ -36,42 +36,42 @@ page 65410 "MNB Send For Approval List"
             action(SendForApproval)
             {
                 Caption = 'Send for Approval';
-                ToolTip = 'Send this sales document for approval';
+                ToolTip = 'Send document for approval';
                 Image = SendMail;
+
                 trigger OnAction()
                 var
                     Approval: Codeunit "MNB Sales Approval";
                 begin
                     Approval.SendForApproval(Rec);
-                    Rec.Modify(); // osveži status na listi
                 end;
             }
 
             action(Approve)
             {
                 Caption = 'Approve';
-                ToolTip = 'Approve this sales document';
+                ToolTip = 'Approve document';
                 Image = Approve;
+
                 trigger OnAction()
                 var
                     Approval: Codeunit "MNB Sales Approval";
                 begin
                     Approval.Approve(Rec);
-                    Rec.Modify();
                 end;
             }
 
             action(Reject)
             {
                 Caption = 'Reject';
-                ToolTip = 'Reject this sales document';
+                ToolTip = 'Reject document';
                 Image = Cancel;
+
                 trigger OnAction()
                 var
                     Approval: Codeunit "MNB Sales Approval";
                 begin
                     Approval.Reject(Rec);
-                    Rec.Modify();
                 end;
             }
         }
