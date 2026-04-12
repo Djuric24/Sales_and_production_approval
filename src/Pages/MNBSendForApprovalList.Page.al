@@ -28,6 +28,16 @@ page 65410 "MNB Send For Approval List"
                 field("MNB Approval Status"; Rec."MNB Approval Status")
                 {
                     ToolTip = 'Specifies the approval status.';
+                    Editable = false;
+                }
+                field("MNB Credit Checked"; Rec."MNB Credit Checked")
+                {
+                    ToolTip = 'Specifies the credit checked';
+                    Editable = false;
+                }
+                field("Amount"; Rec."Amount")
+                {
+                    ToolTip = 'Specifies the amount';
                 }
             }
         }
@@ -42,6 +52,7 @@ page 65410 "MNB Send For Approval List"
                 Caption = 'Send for Approval';
                 ToolTip = 'Send document for approval';
                 Image = SendMail;
+                Enabled = Rec."MNB Approval Status" = Enum::"MNB Sales Approval Status"::Open;
 
                 trigger OnAction()
                 var

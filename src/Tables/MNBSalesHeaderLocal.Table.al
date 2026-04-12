@@ -40,11 +40,13 @@ table 65401 "MNB Sales Header Local"
         field(32; "MNB Credit Checked"; Boolean)
         {
             Caption = 'Credit Checked';
+            InitValue = false;
         }
 
         field(33; "MNB Approval Status"; Enum "MNB Sales Approval Status")
         {
             Caption = 'Approval Status';
+            InitValue = Open;
         }
     }
 
@@ -55,4 +57,12 @@ table 65401 "MNB Sales Header Local"
             Clustered = true;
         }
     }
+    trigger OnModify()
+    begin
+        if "MNB Approval Status" = Enum::"MNB Sales Approval Status"::Approved then
+            Error('Approved documents cannot be modified.');
+
+        if "MNB Approval Status" = Enum::"MNB Sales Approval Status"::Rejected then
+            Error('Rejected documents cannot be modified.');
+    end;
 }

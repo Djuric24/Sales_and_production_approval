@@ -3,6 +3,7 @@ namespace MNB;
 enum 65403 "MNB Sales Approval Status"
 {
     Caption = 'Sales Approval Status';
+    Extensible = true;
 
     value(0; Open)
     {

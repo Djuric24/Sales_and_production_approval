@@ -7,33 +7,68 @@ codeunit 65405 "MNB Sales Approval"
         Customer: Record "MNB Customer";
     begin
 
+        if SalesHeader."MNB Approval Status" <> Enum::"MNB Sales Approval Status"::Open then
+            Error('Only Open documents can be sent.');
+
+
+        if SalesHeader."MNB Customer No." = '' then
+            Error('Customer must be selected.');
+
         if not Customer.Get(SalesHeader."MNB Customer No.") then
             Error('Customer %1 does not exist.', SalesHeader."MNB Customer No.");
 
-        if (Customer.Balance + SalesHeader.Amount) > Customer."Credit Limit" then
-            Error('Credit limit exceeded for customer %1. Available: %2, Attempted: %3',
-                Customer.Name, Customer."Credit Limit" - Customer.Balance, SalesHeader.Amount);
+
+        if SalesHeader.Amount <= 0 then
+            Error('Amount must be greater than 0.');
+
 
         SalesHeader."MNB Credit Checked" := true;
-        SalesHeader."MNB Approval Status" := SalesHeader."MNB Approval Status"::"Pending Approval";
+
+        if (Customer.Balance + SalesHeader.Amount) > Customer."Credit Limit" then begin
+
+            SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::"Pending Approval";
+            SalesHeader.Modify();
+
+            Message(
+                'Credit limit exceeded for customer %1. Document sent for approval.',
+                Customer.Name
+            );
+
+            exit;
+        end;
+
+
+        SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::"Pending Approval";
         SalesHeader.Modify();
     end;
+
 
     procedure Approve(var SalesHeader: Record "MNB Sales Header Local")
     begin
+
         if UserId <> 'ADMIN' then
             Error('Only ADMIN can approve.');
 
-        SalesHeader."MNB Approval Status" := SalesHeader."MNB Approval Status"::Approved;
+
+        if SalesHeader."MNB Approval Status" <> Enum::"MNB Sales Approval Status"::"Pending Approval" then
+            Error('Only pending documents can be approved.');
+
+        SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::Approved;
         SalesHeader.Modify();
     end;
 
+
     procedure Reject(var SalesHeader: Record "MNB Sales Header Local")
     begin
-        if UserId <> 'ADMIN' then
-            Error('Only ADMIN can reject (test mode).');
 
-        SalesHeader."MNB Approval Status" := SalesHeader."MNB Approval Status"::Rejected;
+        if UserId <> 'ADMIN' then
+            Error('Only ADMIN can reject.');
+
+
+        if SalesHeader."MNB Approval Status" <> Enum::"MNB Sales Approval Status"::"Pending Approval" then
+            Error('Only pending documents can be rejected.');
+
+        SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::Rejected;
         SalesHeader.Modify();
     end;
 }
