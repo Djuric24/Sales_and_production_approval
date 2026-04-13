@@ -22,7 +22,7 @@ table 65403 "MNB Sales Approval Log"
             Caption = 'Action';
         }
 
-        field(4; "User ID"; Code[50])
+        field(4; "User ID"; Text[50])
         {
             Caption = 'User ID';
         }
