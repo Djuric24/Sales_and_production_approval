@@ -48,6 +48,11 @@ table 65401 "MNB Sales Header Local"
             Caption = 'Approval Status';
             InitValue = Open;
         }
+        field(34; "MNB Credit Exceeded"; Boolean)
+        {
+            Caption = 'Credit Exceeded';
+            Editable = false;
+        }
     }
 
     keys

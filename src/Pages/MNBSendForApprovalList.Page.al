@@ -17,27 +17,38 @@ page 65410 "MNB Send For Approval List"
                 {
                     ToolTip = 'Specifies the document number.';
                 }
+
                 field("MNB Customer No."; Rec."MNB Customer No.")
                 {
                     ToolTip = 'Specifies the customer number.';
                 }
+
                 field("Customer Name"; Rec."Customer Name")
                 {
                     ToolTip = 'Specifies the customer name.';
                 }
+
+                field("Amount"; Rec."Amount")
+                {
+                    ToolTip = 'Specifies the amount.';
+                }
+
+                field("MNB Credit Checked"; Rec."MNB Credit Checked")
+                {
+                    ToolTip = 'Specifies if credit check is done.';
+                    Editable = false;
+                }
+
+                field("MNB Credit Exceeded"; Rec."MNB Credit Exceeded")
+                {
+                    ToolTip = 'Indicates if credit limit is exceeded.';
+                    Editable = false;
+                }
+
                 field("MNB Approval Status"; Rec."MNB Approval Status")
                 {
                     ToolTip = 'Specifies the approval status.';
                     Editable = false;
-                }
-                field("MNB Credit Checked"; Rec."MNB Credit Checked")
-                {
-                    ToolTip = 'Specifies the credit checked';
-                    Editable = false;
-                }
-                field("Amount"; Rec."Amount")
-                {
-                    ToolTip = 'Specifies the amount';
                 }
             }
         }
@@ -50,8 +61,9 @@ page 65410 "MNB Send For Approval List"
             action(SendForApproval)
             {
                 Caption = 'Send for Approval';
-                ToolTip = 'Send document for approval';
                 Image = SendMail;
+                ToolTip = 'Send document for approval';
+
                 Enabled = Rec."MNB Approval Status" = Enum::"MNB Sales Approval Status"::Open;
 
                 trigger OnAction()
@@ -65,8 +77,10 @@ page 65410 "MNB Send For Approval List"
             action(Approve)
             {
                 Caption = 'Approve';
-                ToolTip = 'Approve document';
                 Image = Approve;
+                ToolTip = 'Approve document';
+
+                Enabled = Rec."MNB Approval Status" = Enum::"MNB Sales Approval Status"::"Pending Approval";
 
                 trigger OnAction()
                 var
@@ -79,8 +93,10 @@ page 65410 "MNB Send For Approval List"
             action(Reject)
             {
                 Caption = 'Reject';
-                ToolTip = 'Reject document';
                 Image = Cancel;
+                ToolTip = 'Reject document';
+
+                Enabled = Rec."MNB Approval Status" = Enum::"MNB Sales Approval Status"::"Pending Approval";
 
                 trigger OnAction()
                 var

@@ -21,34 +21,26 @@ codeunit 65405 "MNB Sales Approval"
         if SalesHeader.Amount <= 0 then
             Error('Amount must be greater than 0.');
 
-
         SalesHeader."MNB Credit Checked" := true;
 
-        if (Customer.Balance + SalesHeader.Amount) > Customer."Credit Limit" then begin
-
-            SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::"Pending Approval";
-            SalesHeader.Modify();
-
-            Message(
-                'Credit limit exceeded for customer %1. Document sent for approval.',
-                Customer.Name
-            );
-
-            exit;
-        end;
-
+        if (Customer.Balance + SalesHeader.Amount) > Customer."Credit Limit" then
+            SalesHeader."MNB Credit Exceeded" := true
+        else
+            SalesHeader."MNB Credit Exceeded" := false;
 
         SalesHeader."MNB Approval Status" := Enum::"MNB Sales Approval Status"::"Pending Approval";
         SalesHeader.Modify();
+
+        if SalesHeader."MNB Credit Exceeded" then
+            Message('Credit limit exceeded for customer %1. Document sent for approval.', Customer.Name);
+
     end;
 
 
     procedure Approve(var SalesHeader: Record "MNB Sales Header Local")
     begin
-
         if UserId <> 'ADMIN' then
             Error('Only ADMIN can approve.');
-
 
         if SalesHeader."MNB Approval Status" <> Enum::"MNB Sales Approval Status"::"Pending Approval" then
             Error('Only pending documents can be approved.');
@@ -60,10 +52,8 @@ codeunit 65405 "MNB Sales Approval"
 
     procedure Reject(var SalesHeader: Record "MNB Sales Header Local")
     begin
-
         if UserId <> 'ADMIN' then
             Error('Only ADMIN can reject.');
-
 
         if SalesHeader."MNB Approval Status" <> Enum::"MNB Sales Approval Status"::"Pending Approval" then
             Error('Only pending documents can be rejected.');
